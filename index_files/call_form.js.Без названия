@@ -1,0 +1,61 @@
+﻿jQuery(document).ready(function(){
+
+    var pop_window = jQuery('.autoriz_form');
+	var pop_bg = jQuery('.autoriz_empty');
+	var pop_bg2 = jQuery('.autoriz_empty2');
+	
+    jQuery('.autoriz_open').click(function(e){ 
+	    e.preventDefault();
+        pop_window.slideToggle(600);
+		pop_bg.toggle();
+		pop_bg2.toggle();
+    });
+
+    jQuery('.autoriz_form button').click(function(){ 
+	    pop_bg.hide();
+		pop_bg2.hide();
+        pop_window.slideUp(600);		
+    });
+	
+	jQuery('.autoriz_empty').click(function(){ 
+	   jQuery(this).hide();
+	   pop_bg2.hide();
+       pop_window.slideUp(600);
+    });
+	
+	jQuery('.autoriz_empty2').click(function(){ 
+	   jQuery(this).hide();
+	   pop_bg.hide();
+       pop_window.slideUp(600);
+    });
+
+    jQuery('.autoriz_frm').submit(function(e){
+    e.preventDefault();
+    var m_method=jQuery(this).attr('method');
+    var m_action=jQuery(this).attr('action');
+    var m_data=jQuery(this).serialize();
+
+    jQuery.ajax({
+    type: m_method,
+    url: m_action,
+    data: m_data,
+    success: function(result){
+	pop_bg.hide();
+	pop_bg2.hide();
+	pop_window.slideUp(600);
+	jQuery('.autoriz_frm')[0].reset();
+	setTimeout("alert('Ваша заявка успешно отправлена!');", 700);    
+    //jQuery('.call_frm').html(result);
+    },
+    error:  function(){
+	pop_bg.hide();
+	pop_bg2.hide();
+	pop_window.slideUp(600);
+	jQuery('.autoriz_frm')[0].reset();
+	setTimeout("alert('Не удалось отправить вашу заявку!');", 700); 
+    }
+    });
+	
+    });
+
+	});
