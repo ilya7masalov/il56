@@ -1,0 +1,154 @@
+window.onload = funonload;
+function funonload() {
+var coocka = ReadSpec('special');
+addButton(coocka);
+checkSpec(coocka);
+}
+
+function checkSpec(spec) {
+  setButton(spec);
+if (spec == 'y')
+{
+  addStyleSheet('/templates/school/js/vi.css');
+}
+}
+
+function ReadSpec(name)
+{
+ var matches = document.cookie.match(new RegExp(
+ "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function SetCookieSpec(name,value) {
+    document.cookie = name + "=" + value;
+}
+
+function addButton() {
+    var button = document.createElement('input');
+    var parentElem = document.body;
+    var s = ReadSpec('special');
+    button.type = 'button';
+    button.id = 'spec';
+    button.value = ' ';
+    button.setAttribute("onclick","Spec()");
+    button.setAttribute("style","right: 0; width: 128px;height: 128px;margin-bottom: 5px;border: 0px black outset;background: url(/templates/school/js/n.png);position: fixed;    margin-top: 45px;");
+    parentElem.insertBefore(button, parentElem.firstChild);
+    setButton(s);
+}
+
+function addStyleSheet(url)
+{
+  // ??????? ??????? LINK/STYLE ? ????????? ? ????????
+  var style;
+
+//  
+
+//    if (typeof url == 'undefined')
+//  {
+//    style = document.createElement('style');
+//  }
+//  else
+//  {
+    style = document.createElement('link');
+   style.rel = 'stylesheet';
+   style.type = 'text/css';
+    style.href = url;
+//    style.id = 'speccss';
+//  }
+  
+   document.getElementsByTagName('head')[0].appendChild(style);
+  // ??????? ????? ????? ? ????????? styleSheets
+  style = document.styleSheets[document.styleSheets.length - 1];
+
+  // ?????? ?????? ???????????? ? W3C DOM2 (??? IE)
+  return StyleSheet_makeCompatible(style);
+
+}
+function delStyleSheet()
+{
+style=document.getElementsByTagName('head')[0].lastChild;//document.styleSheets[document.styleSheets.length - 1]
+document.getElementsByTagName('head')[0].removeChild(style);//
+}
+
+
+function Spec() {
+var spec = ReadSpec('special');
+//alert (spec);
+
+if (spec == 'y')
+{
+   delStyleSheet();
+   SetCookieSpec('special','n');  setButton('n');
+}
+else {
+   addStyleSheet('/templates/school/js/vi.css');
+   SetCookieSpec('special','y');  setButton('y');
+
+}
+}
+
+function setButton(spec) {
+var inputTag = document.getElementById("spec");
+ if (inputTag.hasAttribute("value"))               // ???? ???? ??????? value
+   defaultValue = inputTag.getAttribute("value");
+//if (spec == 'y')
+//{
+//  inputTag.setAttribute("value", "");
+//}
+//else {
+//  inputTag.setAttribute("value", "?????? ??? ????????????");
+//}
+//}
+if (spec == 'y')
+{
+  inputTag.setAttribute("style", "right: 0; width: 128px;height: 128px;margin-bottom: 5px;border: 0px black outset;background: url(/templates/school/js/n.png);position: fixed;    margin-top: 45px;");
+
+}
+else {
+  inputTag.setAttribute("style", "right: 0; width: 128px;height: 128px;margin-bottom: 5px;border: 0px black outset;background: url(/templates/school/js/n.png);position: fixed;    margin-top: 45px;");
+}
+}
+
+
+function StyleSheet_makeCompatible(style)
+{
+  // Mozilla ?? ???? ??????? ? cssRules ?? ???????? ?????
+  try
+  {
+    style.cssRules;
+  }
+  catch (e)
+  {
+    return style;
+  }
+
+  // ??????? CSSStyleSheet.cssRules
+  if (typeof style.cssRules == 'undefined' && typeof style.rules != 'undefined')
+    style.cssRules = style.rules;
+
+  // ??????? CSSStyleSheet.insertRule ? CSSStyleSheet.deleteRule
+  if (typeof style.insertRule == 'undefined' && typeof style.addRule != 'undefined')
+    style.insertRule = StyleSheet_insertRule;
+  if (typeof style.deleteRule == 'undefined' && typeof style.removeRule != 'undefined')
+    style.deleteRule = style.removeRule;
+
+  // ?????????, ?????????? ?? ??? ?????? ????????
+  if (typeof style.cssRules == 'undefined' || typeof style.insertRule == 'undefined'
+      || typeof style.deleteRule == 'undefined')
+    return null;
+  else
+    return style;
+}
+
+function StyleSheet_insertRule(rule, index)
+{
+  // ???????? ???????? ? ????? ?? ?????????
+  if (rule.match(/^([^{]+)\{(.*)\}\s*$/))
+  {
+    this.addRule(RegExp.$1, RegExp.$2, index);
+    return index;
+  }
+  throw "Syntax error in CSS rule to be added";
+}
